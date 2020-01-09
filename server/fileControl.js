@@ -66,4 +66,8 @@ router.delete('/delDir', async (ctx) => {
   }
 })
 
+router.get('/', ctx => {
+  ctx.response.body = '测试成功'
+})
+
 module.exports = router
