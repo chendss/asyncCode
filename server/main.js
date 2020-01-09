@@ -1,9 +1,22 @@
-const Koa = require('koa')
-const cors = require('koa2-cors')
-const app = new Koa()
 const json = require('koa-json')
+const cors = require('koa2-cors')
+const app = new (require('koa'))()
+const { toArray } = require('./tools')
+const fileControl = require('./fileControl')
 const bodyparser = require('koa-bodyparser')
-const addFileRoute = require('./addFile')
+
+const routerArray = function () {
+  return [
+    fileControl
+  ]
+}
+
+const registerRoute = function (routeList) {
+  const list = toArray(routeList)
+  for (let r of list) {
+    app.use(r.routes(), r.allowedMethods())
+  }
+}
 
 const registered = function () {
   app.use(cors())
@@ -11,19 +24,12 @@ const registered = function () {
     enableTypes: ['json', 'form', 'text']
   }))
   app.use(json())
-  app.use(addFileRoute.routes(), addFileRoute.allowedMethods())
-}
-
-const registeredApi = function () {
-  app.use(async ctx => {
-    ctx.body = 'Hello World'
-  })
 }
 
 
 const main = function () {
   registered()
-  registeredApi()
+  registerRoute(routerArray())
   app.listen(9988)
 }
 

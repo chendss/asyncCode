@@ -1,19 +1,53 @@
 const chokidar = require('chokidar')
-const { pathDict } = require('../clientConfig')
+const { pathDict, url } = require('../clientConfig')
 const axios = require('axios').default
 
+
+const addAction = function (path, id) {
+  axios.post(`${url}/addFile`, {
+    path, id
+  })
+  console.log('测试新增', path, id)
+}
+
+const changeAction = function (path, id) {
+  console.log('测试变化', path, id)
+}
+
+const unlinkAction = function (path, id) {
+  console.log('测试删除', path, id)
+}
+
+const unlinkDirAction = function (path, id) {
+  axios.delete(`${url}/delDir`, {
+    data: {
+      path, id
+    }
+  })
+  console.log('测试文件夹删除', path, id)
+}
+
+/**
+ * 
+ *
+ * @param {*} basePath
+ * @param {FSWatcher} watcher
+ * @param {*} id
+ */
 const watching = function (basePath, watcher, id) {
-  watcher.on('add', path => {
-    const newPath = path.replace(basePath, '')
-    axios.post('http://localhost:9988/addFile', {
-      path: newPath, id
+  const dict = {
+    add: addAction,
+    change: changeAction,
+    unlink: unlinkAction,
+    unlinkDir: unlinkDirAction,
+  }
+  for (let key of Object.keys(dict)) {
+    const fun = dict[key]
+    watcher.on(key, path => {
+      const newPath = path.replace(basePath, '')
+      fun(newPath, id)
     })
-    console.log('测试新增', newPath, id)
-  })
-  watcher.on('change', path => {
-    const newPath = path.replace(basePath, '')
-    console.log('测试变化', newPath, id)
-  })
+  }
 }
 
 const main = function () {

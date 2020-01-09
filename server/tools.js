@@ -25,6 +25,13 @@ const mkdirForSrc = function (src) {
   mkdirsSync(dirPath_)
 }
 
+const toArray = function (source) {
+  if (source instanceof Array) {
+    return source
+  }
+  return [source].filter(item => item)
+}
+
 module.exports = {
-  log, mkdirForSrc
+  log, mkdirForSrc, toArray
 }
