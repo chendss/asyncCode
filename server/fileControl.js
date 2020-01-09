@@ -5,14 +5,28 @@ const router = require('koa-router')()
 const config = require('../serverConfig')
 const { log, mkdirForSrc } = require('./tools')
 
+const changeFile = function (id, path, context, msg) {
+  const index = config[id]
+  const p = `${index}${path}`
+  mkdirForSrc(p)
+  fs.writeFileSync(p, context, () => {
+    log(msg, index, path)
+  })
+}
+
 router.post('/addFile', async (ctx) => {
   let data = ctx.request.body
   const { id, path } = data
-  const index = config[id]
-  const p = `${index}${path}`
-  log('添加文件', index, path)
-  mkdirForSrc(p)
-  fs.writeFile(p, '', () => { })
+  changeFile(id, path, '', '添加文件')
+  ctx.response.body = {
+    status: '成功'
+  }
+})
+
+router.post('/changeFile', async (ctx) => {
+  let data = ctx.request.body
+  const { id, path, context } = data
+  changeFile(id, path, context, '修改文件')
   ctx.response.body = {
     status: '成功'
   }

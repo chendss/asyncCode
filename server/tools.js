@@ -2,11 +2,15 @@ const log = console.log
 const fs = require('fs')
 const path = require('path')
 
-const mkdirsSync = function (dirpath) {
-  if (!fs.existsSync(path.dirname(dirpath))) {
-    mkdirs(path.dirname(dirpath))
+const mkdirsSync = function (dirname) {
+  if (fs.existsSync(dirname)) {
+    return true
+  } else {
+    if (mkdirsSync(path.dirname(dirname))) {
+      fs.mkdirSync(dirname)
+      return true
+    }
   }
-  fs.mkdirSync(dirpath)
 }
 
 /**

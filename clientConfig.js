@@ -4,5 +4,9 @@ module.exports = {
     testDemo: 'C:\\work\\project\\asyncCode\\testDemo\\testDemo_client\\testAddFile',
     testDemo2: 'C:\\work\\project\\asyncCode\\testDemo\\testDemo_client\\testAddFile2',
   },
-  url: 'http://localhost:9988'
+  url: 'http://localhost:9988',
+  extraList: [
+    '.git',
+    'node_modules'
+  ]
 }

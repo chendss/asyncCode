@@ -1,7 +1,8 @@
+const log = console.log
+const fs = require('fs')
 const chokidar = require('chokidar')
-const { pathDict, url } = require('../clientConfig')
 const axios = require('axios').default
-
+const { pathDict, url, extraList } = require('../clientConfig')
 
 const addAction = function (path, id) {
   axios.post(`${url}/addFile`, {
@@ -10,11 +11,20 @@ const addAction = function (path, id) {
   console.log('测试新增', path, id)
 }
 
-const changeAction = function (path, id) {
-  console.log('测试变化', path, id)
+const changeAction = function (path, id, filePath) {
+  const context = fs.readFileSync(filePath, 'utf8')
+  axios.post(`${url}/changeFile`, {
+    path, id, context
+  })
+  console.log('测试变化', context, path, id)
 }
 
 const unlinkAction = function (path, id) {
+  axios.delete(`${url}/delFile`, {
+    data: {
+      path, id
+    }
+  })
   console.log('测试删除', path, id)
 }
 
@@ -44,8 +54,11 @@ const watching = function (basePath, watcher, id) {
   for (let key of Object.keys(dict)) {
     const fun = dict[key]
     watcher.on(key, path => {
+      if (extraList.some(p => path.includes(p))) {
+        return
+      }
       const newPath = path.replace(basePath, '')
-      fun(newPath, id)
+      fun(newPath, id, path)
     })
   }
 }
