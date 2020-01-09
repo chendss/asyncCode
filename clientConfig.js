@@ -1,8 +1,7 @@
 module.exports = {
   pathDict: {
-    yxWidget: 'C:\\work\project\\lego\\yx-widgetdemo-web-admin\\src\\yx-widget',
-    testDemo: 'C:\\work\\project\\asyncCode\\testDemo\\testDemo_client\\testAddFile',
-    testDemo2: 'C:\\work\\project\\asyncCode\\testDemo\\testDemo_client\\testAddFile2',
+    yxWidget: 'C:\\work\\project\\lego\\yx-widgetdemo-web-admin\\src\\yx-widget',
+    winshareOperation: 'C:\\work\\project\\winshare\\winshare-operations-web-pc'
   },
   url: 'http://localhost:9988',
   extraList: [

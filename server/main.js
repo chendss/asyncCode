@@ -30,7 +30,7 @@ const registered = function () {
 const main = function () {
   registered()
   registerRoute(routerArray())
-  app.listen(9988)
+  app.listen(9988, '0.0.0.0')
 }
 
 main()
