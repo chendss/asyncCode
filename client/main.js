@@ -2,13 +2,30 @@ const log = console.log
 const fs = require('fs')
 const chokidar = require('chokidar')
 const axios = require('axios').default
-const { pathDict, url, extraList } = require('../clientConfig')
+const { pathDict, url, extraList, ignored } = require('../clientConfig')
+
+let keepList = [], sleep = true
+
+const sleepControl = function () {
+  console.time('文件开始监听，加载耗时')
+  const interval = setInterval(() => {
+    for (let i = 0; i < 20; i++) {
+      if (keepList.length !== 0) {
+        keepList.pop()
+      } else {
+        sleep = false
+        console.timeEnd('文件开始监听，加载耗时')
+        clearInterval(interval)
+        break
+      }
+    }
+  }, 100)
+}
 
 const addAction = function (path, id) {
   axios.post(`${url}/addFile`, {
     path, id
   })
-  console.log('测试新增', path, id)
 }
 
 const changeAction = function (path, id, filePath) {
@@ -16,7 +33,6 @@ const changeAction = function (path, id, filePath) {
   axios.post(`${url}/changeFile`, {
     path, id, context
   })
-  console.log('测试变化', context, path, id)
 }
 
 const unlinkAction = function (path, id) {
@@ -25,7 +41,6 @@ const unlinkAction = function (path, id) {
       path, id
     }
   })
-  console.log('测试删除', path, id)
 }
 
 const unlinkDirAction = function (path, id) {
@@ -34,7 +49,6 @@ const unlinkDirAction = function (path, id) {
       path, id
     }
   })
-  console.log('测试文件夹删除', path, id)
 }
 
 /**
@@ -54,7 +68,8 @@ const watching = function (basePath, watcher, id) {
   for (let key of Object.keys(dict)) {
     const fun = dict[key]
     watcher.on(key, path => {
-      if (extraList.some(p => path.includes(p))) {
+      keepList.push(false)
+      if (sleep === true || extraList.some(p => path.includes(p))) {
         return
       }
       const newPath = path.replace(basePath, '')
@@ -67,10 +82,13 @@ const main = function () {
   for (let id of Object.keys(pathDict)) {
     const index = pathDict[id]
     const watcher = chokidar.watch(index, {
-      persistent: true
+      ignored,
+      interval: 1000,
+      persistent: true,
     })
-    setTimeout(() => { watching(index, watcher, id) }, 100)
+    watching(index, watcher, id)
   }
+  setTimeout(sleepControl, 300)
 }
 
 main()
