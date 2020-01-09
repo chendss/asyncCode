@@ -1,0 +1,22 @@
+{
+  "name": "asynccode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start_client": "node client/main.js",
+    "start_server": "node server/main.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.1",
+    "chokidar": "^3.3.1",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-json": "^2.0.2",
+    "koa-router": "^7.4.0",
+    "koa2-cors": "^2.0.6",
+    "lodash": "^4.17.15"
+  }
+}
