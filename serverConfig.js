@@ -1,3 +1,7 @@
 module.exports = {
-  test: 'C:\\work\\project\\asyncCode\\testDemo\\recever'
+  receverDict: {
+    test: 'C:\\work\\project\\asyncCode\\testDemo\\recever'
+  },
+  port: 9988,
+  host: '0.0.0.0'
 }

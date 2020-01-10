@@ -2,8 +2,8 @@
 const fs = require('fs')
 const rimraf = require('rimraf')
 const router = require('koa-router')()
-const config = require('../serverConfig')
 const { log, mkdirForSrc } = require('./tools')
+const config = require('../serverConfig').receverDict
 
 const changeFile = function (id, path, context, msg) {
   const index = config[id]

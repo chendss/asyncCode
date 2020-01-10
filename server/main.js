@@ -4,6 +4,7 @@ const app = new (require('koa'))()
 const { toArray } = require('./tools')
 const fileControl = require('./fileControl')
 const bodyparser = require('koa-bodyparser')
+const { host, port } = require('../serverConfig')
 
 const routerArray = function () {
   return [
@@ -30,7 +31,7 @@ const registered = function () {
 const main = function () {
   registered()
   registerRoute(routerArray())
-  app.listen(9988, '0.0.0.0')
+  app.listen(port, host)
 }
 
 main()
