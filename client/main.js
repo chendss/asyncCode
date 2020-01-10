@@ -2,7 +2,7 @@ const log = console.log
 const fs = require('fs')
 const chokidar = require('chokidar')
 const axios = require('axios').default
-const { pathDict, url, extraList, ignored } = require('../clientConfig')
+const { pathDict, url, extraList, ignored, sleepTime } = require('../clientConfig')
 
 let keepList = [], sleep = true
 
@@ -88,7 +88,7 @@ const main = function () {
     })
     watching(index, watcher, id)
   }
-  setTimeout(sleepControl, 300)
+  setTimeout(sleepControl, sleepTime)
 }
 
 main()
